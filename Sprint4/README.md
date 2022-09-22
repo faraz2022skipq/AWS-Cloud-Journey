@@ -2,7 +2,7 @@
 
 The aim of this project is to create a REST API using AWS API Gateway to allow users to communicate with the application.
 
-In this, the user can perform CRUD (Create, Read, Upgrate and Delete) operation for adding, reading, upgrading or deleting the URLs from dynamodb URL table that act as an input for our web health crawler application.
+In this, the user can perform CRUD (Create, Read, Upgrate and Delete) operation for adding, reading, upgrading or deleting the URLs from dynamodb URL table that act as an input for our web health crawler application. We can add any number of URLs.
 
 The web crawler will take these inputs and will create alarms, send notification to DevOps engineer if an alrams goes on and will save the alarm along with the timestamp in dynamodb Alarm tables. 
 
