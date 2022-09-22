@@ -1,0 +1,765 @@
+{
+ "Resources": {
+  "FWHLambdaRole04BECAC8": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/CloudWatchFullAccess"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/FWHLambda Role/Resource"
+   }
+  },
+  "FWHLambdaB6749FAB": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "bf46a4e46eef9cc53f79d2ab606508f45280b0a0c551d7ecc784b70fcc79eb98.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "FWHLambdaRole04BECAC8",
+      "Arn"
+     ]
+    },
+    "Handler": "FWHLambda.lambda_handler",
+    "Runtime": "python3.8",
+    "Timeout": 15
+   },
+   "DependsOn": [
+    "FWHLambdaRole04BECAC8"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/FWHLambda/Resource",
+    "aws:asset:path": "asset.bf46a4e46eef9cc53f79d2ab606508f45280b0a0c551d7ecc784b70fcc79eb98",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "DBLambdaRoleA12D87AA": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonDynamoDBFullAccess"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/DBLambda Role/Resource"
+   }
+  },
+  "DBLambdaRoleDefaultPolicyD1032F5B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:*",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AlarmNotificationTable10612B7E",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "DBLambdaRoleDefaultPolicyD1032F5B",
+    "Roles": [
+     {
+      "Ref": "DBLambdaRoleA12D87AA"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/DBLambda Role/DefaultPolicy/Resource"
+   }
+  },
+  "DBLambda0EC8F179": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "bf46a4e46eef9cc53f79d2ab606508f45280b0a0c551d7ecc784b70fcc79eb98.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "DBLambdaRoleA12D87AA",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "AlarmTable": {
+       "Ref": "AlarmNotificationTable10612B7E"
+      }
+     }
+    },
+    "Handler": "DBLambda.lambda_handler",
+    "Runtime": "python3.8",
+    "Timeout": 15
+   },
+   "DependsOn": [
+    "DBLambdaRoleDefaultPolicyD1032F5B",
+    "DBLambdaRoleA12D87AA"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/DBLambda/Resource",
+    "aws:asset:path": "asset.bf46a4e46eef9cc53f79d2ab606508f45280b0a0c551d7ecc784b70fcc79eb98",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "DBLambdaAllowInvokeFarazSprint2StackAlarmNotification4D8864C61649144E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "DBLambda0EC8F179",
+      "Arn"
+     ]
+    },
+    "Principal": "sns.amazonaws.com",
+    "SourceArn": {
+     "Ref": "AlarmNotificationB0D2F5CA"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/DBLambda/AllowInvoke:FarazSprint2StackAlarmNotification4D8864C6"
+   }
+  },
+  "DBLambdaAlarmNotificationC4949971": {
+   "Type": "AWS::SNS::Subscription",
+   "Properties": {
+    "Protocol": "lambda",
+    "TopicArn": {
+     "Ref": "AlarmNotificationB0D2F5CA"
+    },
+    "Endpoint": {
+     "Fn::GetAtt": [
+      "DBLambda0EC8F179",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/DBLambda/AlarmNotification/Resource"
+   }
+  },
+  "AlarmNotificationTable10612B7E": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "KeySchema": [
+     {
+      "AttributeName": "ID",
+      "KeyType": "HASH"
+     }
+    ],
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "ID",
+      "AttributeType": "S"
+     }
+    ],
+    "ProvisionedThroughput": {
+     "ReadCapacityUnits": 5,
+     "WriteCapacityUnits": 5
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/AlarmNotificationTable/Resource"
+   }
+  },
+  "ScheduleRuleDA5BD877": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "ScheduleExpression": "cron(* * * * ? *)",
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "Arn": {
+       "Fn::GetAtt": [
+        "FWHLambdaB6749FAB",
+        "Arn"
+       ]
+      },
+      "Id": "Target0"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/ScheduleRule/Resource"
+   }
+  },
+  "ScheduleRuleAllowEventRuleFarazSprint2StackFWHLambda3144B23FEC198088": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "FWHLambdaB6749FAB",
+      "Arn"
+     ]
+    },
+    "Principal": "events.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "ScheduleRuleDA5BD877",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/ScheduleRule/AllowEventRuleFarazSprint2StackFWHLambda3144B23F"
+   }
+  },
+  "AlarmNotificationB0D2F5CA": {
+   "Type": "AWS::SNS::Topic",
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/AlarmNotification/Resource"
+   }
+  },
+  "AlarmNotificationmuhammadfarazskipqgmailcomA2169A6A": {
+   "Type": "AWS::SNS::Subscription",
+   "Properties": {
+    "Protocol": "email",
+    "TopicArn": {
+     "Ref": "AlarmNotificationB0D2F5CA"
+    },
+    "Endpoint": "muhammad.faraz.skipq@gmail.com"
+   },
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/AlarmNotification/muhammad.faraz.skipq@gmail.com/Resource"
+   }
+  },
+  "availabilityAlarmskipqorgCC6F018A": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "LessThanThreshold",
+    "EvaluationPeriods": 1,
+    "AlarmActions": [
+     {
+      "Ref": "AlarmNotificationB0D2F5CA"
+     }
+    ],
+    "Dimensions": [
+     {
+      "Name": "url",
+      "Value": "skipq.org"
+     }
+    ],
+    "MetricName": "urlavailability",
+    "Namespace": "FWHMatric",
+    "Period": 60,
+    "Statistic": "Average",
+    "Threshold": 1
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/availabilityAlarmskipq.org/Resource"
+   }
+  },
+  "latencyAlarmskipqorg14C51C3D": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanThreshold",
+    "EvaluationPeriods": 1,
+    "AlarmActions": [
+     {
+      "Ref": "AlarmNotificationB0D2F5CA"
+     }
+    ],
+    "Dimensions": [
+     {
+      "Name": "url",
+      "Value": "skipq.org"
+     }
+    ],
+    "MetricName": "urllatency",
+    "Namespace": "FWHMatric",
+    "Period": 60,
+    "Statistic": "Average",
+    "Threshold": 0.4
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/latencyAlarmskipq.org/Resource"
+   }
+  },
+  "availabilityAlarmabcxyzC13D2A71": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "LessThanThreshold",
+    "EvaluationPeriods": 1,
+    "AlarmActions": [
+     {
+      "Ref": "AlarmNotificationB0D2F5CA"
+     }
+    ],
+    "Dimensions": [
+     {
+      "Name": "url",
+      "Value": "abc.xyz"
+     }
+    ],
+    "MetricName": "urlavailability",
+    "Namespace": "FWHMatric",
+    "Period": 60,
+    "Statistic": "Average",
+    "Threshold": 1
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/availabilityAlarmabc.xyz/Resource"
+   }
+  },
+  "latencyAlarmabcxyzF3CD0F42": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanThreshold",
+    "EvaluationPeriods": 1,
+    "AlarmActions": [
+     {
+      "Ref": "AlarmNotificationB0D2F5CA"
+     }
+    ],
+    "Dimensions": [
+     {
+      "Name": "url",
+      "Value": "abc.xyz"
+     }
+    ],
+    "MetricName": "urllatency",
+    "Namespace": "FWHMatric",
+    "Period": 60,
+    "Statistic": "Average",
+    "Threshold": 0.4
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/latencyAlarmabc.xyz/Resource"
+   }
+  },
+  "availabilityAlarmnetlixcomFA19A9BD": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "LessThanThreshold",
+    "EvaluationPeriods": 1,
+    "AlarmActions": [
+     {
+      "Ref": "AlarmNotificationB0D2F5CA"
+     }
+    ],
+    "Dimensions": [
+     {
+      "Name": "url",
+      "Value": "netlix.com"
+     }
+    ],
+    "MetricName": "urlavailability",
+    "Namespace": "FWHMatric",
+    "Period": 60,
+    "Statistic": "Average",
+    "Threshold": 1
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/availabilityAlarmnetlix.com/Resource"
+   }
+  },
+  "latencyAlarmnetlixcomC0DF218A": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanThreshold",
+    "EvaluationPeriods": 1,
+    "AlarmActions": [
+     {
+      "Ref": "AlarmNotificationB0D2F5CA"
+     }
+    ],
+    "Dimensions": [
+     {
+      "Name": "url",
+      "Value": "netlix.com"
+     }
+    ],
+    "MetricName": "urllatency",
+    "Namespace": "FWHMatric",
+    "Period": 60,
+    "Statistic": "Average",
+    "Threshold": 0.4
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/latencyAlarmnetlix.com/Resource"
+   }
+  },
+  "availabilityAlarmpythonorg4C5A33F9": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "LessThanThreshold",
+    "EvaluationPeriods": 1,
+    "AlarmActions": [
+     {
+      "Ref": "AlarmNotificationB0D2F5CA"
+     }
+    ],
+    "Dimensions": [
+     {
+      "Name": "url",
+      "Value": "python.org"
+     }
+    ],
+    "MetricName": "urlavailability",
+    "Namespace": "FWHMatric",
+    "Period": 60,
+    "Statistic": "Average",
+    "Threshold": 1
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/availabilityAlarmpython.org/Resource"
+   }
+  },
+  "latencyAlarmpythonorg29489D47": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanThreshold",
+    "EvaluationPeriods": 1,
+    "AlarmActions": [
+     {
+      "Ref": "AlarmNotificationB0D2F5CA"
+     }
+    ],
+    "Dimensions": [
+     {
+      "Name": "url",
+      "Value": "python.org"
+     }
+    ],
+    "MetricName": "urllatency",
+    "Namespace": "FWHMatric",
+    "Period": 60,
+    "Statistic": "Average",
+    "Threshold": 0.4
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/latencyAlarmpython.org/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WPvW7DMAyEnyW7zKbO0jUJ0Dlwswe0pCas9ROYUgND0LtXklsgne67Iwgee+h72G7wwZ1UU2dohPQRUE6iRJdEaCEN3mhx/HRNT96QXKpdKQuDdlQI6T06Gci7Onvmk54tMReXBe8uyKwDw75K8XCIctLhgKwFOy7X48hypvvf+j9/9neSNW2QhVocWq9K6TOOa8sGWehv7cqZNMTf8rGm0vioHhjkDdLe4GzrqEHOolUqz1/JXcWg2cdZrrtPfPROUWjPnJZw8+5lB2/wut18MVE3RxfIahhW/QGrjh7RXgEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "FarazSprint2Stack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
