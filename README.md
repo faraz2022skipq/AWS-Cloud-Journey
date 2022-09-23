@@ -5,6 +5,6 @@ I have always been curious about how Amazon AWS works and what it can do. I star
 
 I have created a GitHub repository that contains all the projects that I worked on and would like to share it with you all!
 
-The projects are in the form of Sprints. Each Sprint consists of some design and it is possible that other Sprints are dependent on the previous Sprint. 
+The projects are in the form of Sprints. Each Sprint consists of some design problem and it is possible that future Sprints are dependent on the previous Sprint. 
 
 I hope you can take something out of it! 
