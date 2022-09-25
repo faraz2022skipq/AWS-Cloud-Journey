@@ -3,4 +3,4 @@
 This is my very first introduction to the Amazon Web Services and also with Cloud computing. In this project we are getting an overview of the Lambda compute resource of AWS.
 
 # Lambda
-Lambda is a compute resource that is trigger based.
+Lambda is an event-driven, serverless computing platform provided by AWS. 
