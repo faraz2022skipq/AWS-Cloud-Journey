@@ -7,4 +7,4 @@ I have created a GitHub repository that contains all the projects that I worked 
 
 The projects are in the form of Sprints. Each Sprint consists of some design problem and it is possible that future Sprints are dependent on the previous Sprint. 
 
-I hope you can take something out of it! 
+I hope you can take something out of it !!!
