@@ -20,3 +20,6 @@ CloudWatch is a monitoring services that collects monitoring and operational dat
 
 ## AWS DynamoDB
 Amazon DynamoDB is a fully managed, serverless, key-value NoSQL database designed to run high-performance applications at any scale.
+
+## AWS SNS
+Amazon Simple Notification Service (SNS) sends notifications two ways, A2A and A2P. A2A provides allows it to talk to other services while A2P functionality lets you send messages to your customers with SMS texts, push notifications, and email. 
