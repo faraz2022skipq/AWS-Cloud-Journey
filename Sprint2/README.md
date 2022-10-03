@@ -17,3 +17,6 @@ Lambda is an event-driven, serverless computing platform provided by AWS. It is 
 
 ## AWS CloudWatch
 CloudWatch is a monitoring services that collects monitoring and operational data in the form of logs, metrics, and events, and visualizes it using automated dashboards so you can get a unified view of your AWS resources, applications, and services that run on AWS and on premises.
+
+## AWS DynamoDB
+Amazon DynamoDB is a fully managed, serverless, key-value NoSQL database designed to run high-performance applications at any scale.
