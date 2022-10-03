@@ -9,5 +9,10 @@ Another feature is that it store both the latency and availability alarm data in
 4. AWS DynamoDB
 5. AWS SNS
 
-# AWS IAM
+## AWS IAM
 IAM is an acronym for Identity and Access Management. By using AWS IAM, one can specify who or what can access services and resources in AWS and analyze access to refine permissions across AWS.
+
+## AWS Lambda
+Lambda is an event-driven, serverless computing platform provided by AWS. It is a computing service that runs code in response to events and automatically manages the computing resources required by that code.
+
+## AWS CloudWatch
