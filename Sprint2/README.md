@@ -16,3 +16,4 @@ IAM is an acronym for Identity and Access Management. By using AWS IAM, one can 
 Lambda is an event-driven, serverless computing platform provided by AWS. It is a computing service that runs code in response to events and automatically manages the computing resources required by that code.
 
 ## AWS CloudWatch
+CloudWatch is a monitoring services that collects monitoring and operational data in the form of logs, metrics, and events, and visualizes it using automated dashboards so you can get a unified view of your AWS resources, applications, and services that run on AWS and on premises.
