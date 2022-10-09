@@ -5,6 +5,6 @@ I have always been curious about how Amazon AWS works and what it can do. I star
 
 I have created a GitHub repository that contains all the projects that I worked on and would like to share it with you all!
 
-The projects are in the form of Sprints. Each Sprint is an extension of the previous sprint. This is a journey of making an web health crawler and deploying it into a pipeline. Each sprint is a milestone in the whole journey.
+The projects are in the form of Sprints. Each Sprint is an extension of the previous sprint. This is a journey of making a web health crawler and deploying it into a pipeline. Each sprint is a milestone in the whole journey. 
 
 I hope you can take something out of it !!!
